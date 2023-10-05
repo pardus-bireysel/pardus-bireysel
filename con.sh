@@ -25,6 +25,8 @@ cp -r ~/.config/plasmarc ~/con/.config
 cp -r ~/.config/plasmashellrc ~/con/.config
 cp -r ~/.config/touchegg ~/con/.config
 cp -r ~/.config/xsettingsd ~/con/.config
+cp -r ~/ksmserverrc ~/con/.config
+
 
 cp -r ~/.config/autostart/ ~/con/.config
 

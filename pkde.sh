@@ -1,5 +1,6 @@
 #!/bin/bash
 
+### Debian Testing Live Unofficial ISO build
 
 ### gerekli paketler
 apt install debootstrap xorriso squashfs-tools mtools grub-pc-bin grub-efi-amd64 -y
@@ -54,6 +55,28 @@ chroot kaynak apt install bluez-firmware firmware-amd-graphics firmware-atheros 
 
 chroot kaynak apt install kde-standard -y # tam paket için kde-full
 
+###geç kapanma sorunu düzeltme ayarı
+echo '#!/bin/sh' > kaynak/usr/lib/systemd/system-shutdown/kill_kwin.shutdown
+echo '# Kill KWin immediately to prevent stalled shutdowns/reboots' >> kaynak/usr/lib/systemd/system-shutdown/kill_kwin.shutdown
+echo 'pkill -KILL kwin_x11' >> kaynak/usr/lib/systemd/system-shutdown/kill_kwin.shutdown
+chmod +x kaynak/usr/lib/systemd/system-shutdown/kill_kwin.shutdown
+
+echo '[Unit]' > kaynak/etc/systemd/system/kill_kwin.service
+echo 'Description=Kill KWin at shutdown/reboot' >> kaynak/etc/systemd/system/kill_kwin.service
+echo '' >> kaynak/etc/systemd/system/kill_kwin.service
+echo '[Service]' >> kaynak/etc/systemd/system/kill_kwin.service
+echo 'Type=oneshot' >> kaynak/etc/systemd/system/kill_kwin.service
+echo 'ExecStart=/bin/true' >> kaynak/etc/systemd/system/kill_kwin.service
+echo 'ExecStop=/bin/sh /usr/lib/systemd/system-shutdown/kill_kwin.shutdown' >> kaynak/etc/systemd/system/kill_kwin.service
+echo 'RemainAfterExit=true' >> kaynak/etc/systemd/system/kill_kwin.service
+echo '' >> kaynak/etc/systemd/system/kill_kwin.service
+echo '[Install]' >> kaynak/etc/systemd/system/kill_kwin.service
+echo 'WantedBy=multi-user.target' >> kaynak/etc/systemd/system/kill_kwin.service
+chmod +x kaynak/etc/systemd/system/kill_kwin.service
+chroot kaynak systemctl enable kill_kwin.service
+chroot kaynak systemctl start kill_kwin.service
+
+
 chroot kaynak apt purge juk kmail* plasma-discover konqueror kwrite kde-spectacle zutty
 
 ### Yazıcı tarayıcı ve bluetooth paketlerini kuralım (isteğe bağlı)
@@ -61,10 +84,10 @@ chroot kaynak apt install printer-driver-all system-config-printer simple-scan b
 
 chroot kaynak apt install pardus-about pardus-ayyildiz-grub-theme pardus-backgrounds pardus-font-manager pardus-image-writer pardus-installer pardus-java-installer pardus-locales pardus-menus pardus-mycomputer pardus-night-light pardus-package-installer pardus-software pardus-update pardus-usb-formatter pardus-wallpaper-23-0 git system-monitoring-center -y
 
-chroot kaynak apt install bash-completion firefox-esr firefox-esr-l10n-tr libreoffice libreoffice-kf5 libreoffice-l10n-tr flameshot elisa -y
+chroot kaynak apt install bash-completion firefox-esr firefox-esr-l10n-tr libreoffice libreoffice-kf5 libreoffice-l10n-tr flameshot elisa xsel xdotool -y
 
 
-#gesture, libre office theme, emulatör
+#gesture and libre office theme
 chroot kaynak wget -c https://github.com/JoseExposito/touchegg/releases/download/2.0.17/touchegg_2.0.17_amd64.deb -P /tmp/deb
 chroot kaynak wget -c http://archive.ubuntu.com/ubuntu/pool/main/libr/libreoffice/libreoffice-style-yaru_7.5.2-0ubuntu1_all.deb -P /tmp/deb
 chroot kaynak wget -c https://github.com/halak0013/pardus_android_emulator/releases/download/Pardus_Android_Emulator_v1.3/pardus-android-emulator_1.3_all.deb -P /tmp/deb
@@ -77,8 +100,7 @@ chroot kaynak apt install --fix-missing -y
 chroot kaynak apt install --fix-broken -y
 
 cp -r con/.* kaynak/etc/skel/
-
-wget -O /etc/skel/Applications/NormCap.AppImage https://github.com/dynobo/normcap/releases/download/v0.4.4/NormCap-0.4.4-x86_64.AppImage
+cp -r con/* kaynak/etc/skel/
 
 chroot kaynak apt upgrade -y
 
@@ -103,12 +125,12 @@ mv filesystem.squashfs isowork/live/filesystem.squashfs
 cp -pf kaynak/boot/initrd.img* isowork/live/initrd.img
 cp -pf kaynak/boot/vmlinuz* isowork/live/vmlinuz
 
-### iso oluşturma
+### grub işlemleri 
 mkdir -p isowork/boot
 cp -r grub/ isowork/boot/
 
 
-grub-mkrescue isowork -o P23-KDE-amd64.iso
+grub-mkrescue isowork -o Pardus-23.0-KDE-amd64.iso
 
 
 # sudo apt remove knavalbattle artikulate juk timidity blinken cantor kalgebra kalzium kanagram kbruch marble kgeography khangman kig kiten klettres kmplot ktouch kturtle kwordquiz minuet parley rocs step cervisia kapptemplate kcachegrind kimagemapeditor kuiviewer lokalize umbrello imagemagick kruler kcolorchooser kontrast akregator kget konqueror kmail krdc krfb kmouth kcharselect kteatime kgpg kleopatra okteta ktimer kontact bomber bovo gnugo granatier ksnakeduel kajongg kapman katomic kblackbox kblocks kbounce kbreakout kdiamond kfourinline kgoldrunner kigo killbots kiriki kjumpingcube klickety kmahjongg kmines knetwalk knights kolf kollision kpat kreversi konquest ksirk ksquares ksudoku kubrick lskat palapeli ktuberling kshisen picmi klines kspaceduel zutty 
