@@ -1,0 +1,25 @@
+[Desktop Entry]
+DefaultProfile=pars.profile
+
+[General]
+ConfigVersion=1
+
+[MainWindow]
+1536x864 screen: Height=554
+1536x864 screen: Width=911
+1920x1080 screen: Height=554
+1920x1080 screen: Width=911
+1920x1080 screen: XPosition=310
+1920x1080 screen: YPosition=201
+2 screens: Height=511
+2 screens: Width=960
+2 screens: XPosition=2273
+2 screens: YPosition=328
+HDMI-A-0 eDP=HDMI-A-0
+RestorePositionForNextInstance=false
+State=AAAA/wAAAAD9AAAAAQAAAAAAAAAAAAAAAPwCAAAAAvsAAAAcAFMAUwBIAE0AYQBuAGEAZwBlAHIARABvAGMAawAAAAAA/////wAAARUBAAAD+wAAACIAUQB1AGkAYwBrAEMAbwBtAG0AYQBuAGQAcwBEAG8AYwBrAAAAAAD/////AAABfAEAAAMAAAPAAAABswAAAAQAAAAEAAAACAAAAAj8AAAAAQAAAAIAAAACAAAAFgBtAGEAaQBuAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAAAAAAAAAABwAcwBlAHMAcwBpAG8AbgBUAG8AbwBsAGIAYQByAQAAATv/////AAAAAAAAAAA=
+ToolBarsMovable=Disabled
+eDP=eDP
+
+[UiSettings]
+ColorScheme=

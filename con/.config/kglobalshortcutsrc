@@ -1,0 +1,18 @@
+[firefox-esr.desktop]
+_k_friendly_name=Firefox ESR
+_launch=Meta+F,none,Firefox ESR
+
+[org.kde.konsole.desktop]
+_k_friendly_name=Konsole
+_launch=Ctrl+Alt+T,Ctrl+Alt+T,Konsole
+
+[khotkeys]
+_k_friendly_name=Özel Kısayollar Hizmeti
+{1e85a86f-6b70-4578-8808-c535e09e6bc2}=Print,none,flameshot_gui_0
+{23f85cb5-f288-40e3-abc3-b37ae96b827d}=Ctrl+Print,none,norm_cap_ocr
+{911e8d16-ba57-4fa3-9887-a447344d7202}=Shift+Print,none,flameshot_gui_2
+{b184562a-e5bb-4fbe-8c01-c3c476776c7a}=Ctrl+Shift+J,none,translate
+
+[kwin]
+Switch One Desktop to the Right=Meta+Ctrl+Right,Meta+Ctrl+Right,Bir Sağ Masaüstüne Geç
+Switch One Desktop to the Left=Meta+Ctrl+Left,Meta+Ctrl+Left,Bir Sol Masaüstüne Geç

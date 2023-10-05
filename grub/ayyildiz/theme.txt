@@ -1,0 +1,77 @@
+## GRUB THEME FOR PARDUS
+## Designed for any resolution
+
+## Global properties
+
+#Title Settings
+title-text: "PARDUS"
+title-font: "Ashbury TR Regular 54"
+title-color: "#ffffff"
+
+#Desktop Settings
+desktop-image: "background.png"
+#desktop-color: "#30343A"
+#desktop-color: "#2D2D2B"
+
+#Grub Terminal Settings
+terminal-font: "Terminus Regular 14"
+terminal-box: "terminal_box_*.png"
+terminal-left: "0"
+terminal-top: "0"
+terminal-width: "100%"
+terminal-height: "100%"
+terminal-border: "0"
+
+# Show the boot menu
++ boot_menu 
+{
+  # boot_menu coordinate settings
+  left = 13%
+  top = 30%
+  width = 74%
+  height = 45%
+  #visible = default true
+  #menu_pixmap_style = no style
+  item_font = "Terminus Regular 16"
+  item_color = "#ffffff"
+  #item_pixmap_style = no style
+  #selected_item_font = "inherit"
+  #selected_item_color = "#FFFFFF"
+  selected_item_pixmap_style = "select_*.png"
+  item_height = 33
+  item_padding = 3
+  item_spacing = 20
+  icon_width = 24
+  icon_height = 24
+  item_icon_space = 5
+  #scrollbar = show sb default true
+  #scrollbar_width = default 16
+  #scrollbar_frame = default free
+  #scrollbar_thumb = default free
+}
+
++ progress_bar 
+{
+  id = "__timeout__"
+  left = 0
+  width = 100%
+  top = 100%-15
+  height = 15
+  #visible = default true
+  #bg_color = default value "128, 128, 128"
+  #fg_color = default value "200, 200, 200"
+  #text = "@TIMEOUT_NOTIFICATION_SHORT@"
+  text_color = "#0f0f0f"
+  bar_style = "progress_bar_*.png"
+  highlight_style = "progress_highlight_*.png"
+}
+
++ label {
+  top = 100%-50
+  color = "#ffffff"
+  height = 30
+  width = 100%
+  align = "center"
+  text = "@KEYMAP_SHORT@"
+}
+
