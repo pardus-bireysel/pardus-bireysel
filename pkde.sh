@@ -130,7 +130,7 @@ mkdir -p isowork/boot
 cp -r grub/ isowork/boot/
 
 
-grub-mkrescue isowork -o Pardus-23.0-KDE-amd64.iso
+grub-mkrescue isowork -o PKDE-amd64.iso
 
 
 # sudo apt remove knavalbattle artikulate juk timidity blinken cantor kalgebra kalzium kanagram kbruch marble kgeography khangman kig kiten klettres kmplot ktouch kturtle kwordquiz minuet parley rocs step cervisia kapptemplate kcachegrind kimagemapeditor kuiviewer lokalize umbrello imagemagick kruler kcolorchooser kontrast akregator kget konqueror kmail krdc krfb kmouth kcharselect kteatime kgpg kleopatra okteta ktimer kontact bomber bovo gnugo granatier ksnakeduel kajongg kapman katomic kblackbox kblocks kbounce kbreakout kdiamond kfourinline kgoldrunner kigo killbots kiriki kjumpingcube klickety kmahjongg kmines knetwalk knights kolf kollision kpat kreversi konquest ksirk ksquares ksudoku kubrick lskat palapeli ktuberling kshisen picmi klines kspaceduel zutty 
