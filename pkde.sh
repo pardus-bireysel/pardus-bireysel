@@ -84,7 +84,7 @@ chroot kaynak apt install printer-driver-all system-config-printer simple-scan b
 
 chroot kaynak apt install pardus-about pardus-ayyildiz-grub-theme pardus-backgrounds pardus-font-manager pardus-image-writer pardus-installer pardus-java-installer pardus-locales pardus-menus pardus-mycomputer pardus-night-light pardus-package-installer pardus-software pardus-update pardus-usb-formatter pardus-wallpaper-23-0 git system-monitoring-center -y
 
-chroot kaynak apt install bash-completion firefox-esr firefox-esr-l10n-tr libreoffice libreoffice-kf5 libreoffice-l10n-tr flameshot elisa xsel xdotool unrar webapp-manager appimagelauncher -y
+chroot kaynak apt install bash-completion firefox-esr firefox-esr-l10n-tr libreoffice libreoffice-kf5 libreoffice-l10n-tr flameshot elisa xsel xdotool unrar webapp-manager appimagelauncher pkg-config -y
 
 
 #gesture and libre office theme
