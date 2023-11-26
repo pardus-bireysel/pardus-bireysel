@@ -14,14 +14,14 @@
 # Catfish
 # Brasero
 # malcontent-gui (ebeveyn yönetimi)
-# firefox-esr
+# firefox-esr -> firefox
 # gimp
 # ibus
 # thunar? - yerine dolphin
 # xfce uygulamaları -> kde uygulamaları
 
 ## QUICK TEST:
-# # wget -qO- https://raw.githubusercontent.com/pardus-bireysel/pardus-bireysel/main/install.sh | bash <(cat) </dev/tty
+# wget -qO- https://raw.githubusercontent.com/pardus-bireysel/pardus-bireysel/main/install.sh | bash <(cat) </dev/tty
 
 # Error Handling
 set -e
@@ -40,7 +40,7 @@ git_repo_name="pardus-bireysel"
 git_repo_dest="$git_provider_url/$AUTHOR/$git_repo_name"
 git_repo_tag="main"
 
-src_dir="$temp_dir/$git_repo_name-$git_repo_tag/src/"
+# src_dir="$temp_dir/$git_repo_name-$git_repo_tag/src/"
 
 # user=$([ -n "$SUDO_USER" ] && echo "$SUDO_USER" || echo "$USER")
 # home="/home/${user}"
@@ -125,7 +125,8 @@ _checkinput() {
   "" | " ") return 1 ;;
   n | N | H | h | *) return 0 ;;
   esac
-  # TODO bazı durumlarda varsayılan enter işlevinin 0 dönmesi istenebilir!
+  # TODO bazı durumlarda varsayılan enter işlevinin 0 dönmesi istenebilir! Burada 0 mı dönüyor 1 mi???
+  # Default halini degisken olarak ekle
 }
 
 #auto ask question, check answer and return boolean value
@@ -161,13 +162,13 @@ _prechecks() {
     _log "Bu betik sadece GNU/Linux Pardus Dağıtımında (23.0 sürümü) test edilmiştir, farklı bir sistem için devam etmek betiğin çalışmaması ile sonuçlanabilir!" err
     echo "Devam Etmek İstiyor Musunuz"
     _continue_confirmation
-  # TODO GNOME / XFCE masaüstü dağıtımı tespit etme
   else
     if [ "$(awk -F'^VERSION_ID=' '{print $2}' /etc/os-release | awk 'NF')" != '"23.0"' ]; then
       _log "Bu betik Pardus Dağıtımının sadece 23.0 sürümü ile test edilmiştir. Kodun belirli kısımları çalışmayabilir" warn
       echo "Devam Etmek İstiyor Musunuz"
       _continue_confirmation
     else
+      # TODO GNOME / XFCE masaüstü dağıtımı tespit etme
       _log "Pardus 23.0 sürümü saptandı" info
       sleep 0.1
       _log "Kurulum için gereksinimler sağlanmakta" ok
