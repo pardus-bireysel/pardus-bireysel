@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## PATH:
-# 1. Gereksiz Uygulamaları Kaldır
+# 1. Gereksiz Uygulamaları Kaldır - pardus-xfce-* uygulamalarını kaldır
 # 2. XFCE masaüstü ortamını KDE'ye dönüştür
 # 3. Gereksiz servislerin kapatılması
 # 4. KDE servislerinin düzenlenmesi ve gerekli önayarların yapılması
