@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# 2023 🄯 Pardus Bireysel Contributors
+# https://github.com/pardus-bireysel/pardus-bireysel
+
 ## PATH:
 # 1. Gereksiz Uygulamaları Kaldır - pardus-xfce-* uygulamalarını kaldır
 # 2. XFCE masaüstü ortamını KDE'ye dönüştür
@@ -15,7 +18,7 @@
 # Brasero
 # malcontent-gui (ebeveyn yönetimi)
 # firefox-esr -> firefox
-# gimp
+# DONE gimp 
 # ibus
 # thunar? - yerine dolphin
 # xfce uygulamaları -> kde uygulamaları
@@ -40,7 +43,7 @@ git_repo_name="pardus-bireysel"
 git_repo_dest="$git_provider_url/$AUTHOR/$git_repo_name"
 git_repo_tag="main"
 
-# src_dir="$temp_dir/$git_repo_name-$git_repo_tag/src/"
+src_dir="$temp_dir/$git_repo_name-$git_repo_tag/src/"
 
 # user=$([ -n "$SUDO_USER" ] && echo "$SUDO_USER" || echo "$USER")
 # home="/home/${user}"
@@ -199,6 +202,16 @@ _prechecks() {
   # fi
 }
 
+# run any ./script in src directory
+# st
+_run_script() {
+  if [ -f "$src_dir/${1}" ]; then
+    _sudo bash "$src_dir/${1}"
+  else
+    _log "File \"${1}\" not exist" err
+  fi
+}
+
 #download other configs from git provider
 _download() {
   wget -O "$temp_file" "${git_repo_dest}/archive/${git_repo_tag}.tar.gz"
@@ -206,22 +219,6 @@ _download() {
 
   tar -xzf "$temp_file" -C "$temp_dir"
   _log "Arşiv, $temp_dir dizinine ayıklandı" verbose
-}
-
-#configurations before installations
-_preconfigs() {
-  # TODO
-  echo "PRE CONFGIS HERE"
-}
-
-_kdeinstall() {
-  # TODO
-  echo "KDE INSTALLATION HERE"
-}
-
-_postconfigs() {
-  # TODO
-  echo "POST CONFIGS HERE"
 }
 
 #clear cache, delete temporary files
@@ -243,12 +240,20 @@ _interrupt() {
 #          #
 
 if [[ "$1" == "dev" ]]; then
-  _TMP_DEV
-  exit
+  _log "Geliştirici Modundasınız, ne yaptığınızı bilmiyorsanız bu betiği sonlandırınız!!!" warn
+  sleep 3
+  if [[ "$2" == "branch" ]]; then
+    git_repo_tag="$3"
+    src_dir="$temp_dir/$git_repo_name-$git_repo_tag/src/"
+    _log "Branch değiştirildi: ${git_repo_tag}" info
+  else
+    _TMP_DEV
+    exit
+  fi
 fi
 
 _prechecks
 _download
-_preconfigs
-_kdeinstall
-_postconfigs
+_run_script "remove_apps.sh"
+# _run_script "kde_install.sh"
+# _run_script "kde_configurations.sh"
