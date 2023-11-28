@@ -3,27 +3,7 @@
 # 2023 🄯 Pardus Bireysel Contributors
 # https://github.com/pardus-bireysel/pardus-bireysel
 
-## PATH:
-# 1. Gereksiz Uygulamaları Kaldır - pardus-xfce-* uygulamalarını kaldır
-# 2. XFCE masaüstü ortamını KDE'ye dönüştür
-# 3. Gereksiz servislerin kapatılması
-# 4. KDE servislerinin düzenlenmesi ve gerekli önayarların yapılması
-# 5. Plasma ayarlarını kullanıcılar için en hazır şekilde ayarlamak
-# 6. GNOME masaüstünden dönüştürme desteği
-# 7. KDE ilk defa açıldıktan sonra belirli bir script çalıştırmak (cli/tui, pre/post-conf.sh)
-# 8. Pardus Bireysel betiğini arayüz olarak çalıştırabilecek bir GTK uygulaması yazmak (bu scriptlerin kullanım ömrünün dolması)
-
-# Kaldırılacak/Eylemde Bulunulacak Uygulamalar:
-# Catfish
-# Brasero
-# malcontent-gui (ebeveyn yönetimi)
-# firefox-esr -> firefox
-# DONE gimp 
-# ibus
-# thunar? - yerine dolphin
-# xfce uygulamaları -> kde uygulamaları
-
-## QUICK TEST:
+## QUICK TEST (for main branch) :
 # wget -qO- https://raw.githubusercontent.com/pardus-bireysel/pardus-bireysel/main/install.sh | bash <(cat) </dev/tty
 
 # Error Handling

@@ -24,3 +24,8 @@ _done() {
 _start "gimp"
 sudo apt purge gimp
 _done "gimp"
+
+# TODO Uygulamayı silmeden önce uygulamanın olup olmadığı kontrol edilebilir
+# TODO error handling, silme işlemi hata verirse veya kabuk hata kodu dönerse kullanıcı bilgilendirilmeli
+# TODO çok fazla yazı gözükmemesi adına _start komutu verbose değişkenine bağlanabilir, varsayılan olarak gizlenir
+# TODO basit bir komutla tek tek silinmesi gereken uygulamalar için array'e atıp bir for döngüsü açılabilir. Fazla koddan kaçınılmış olur
