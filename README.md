@@ -23,3 +23,8 @@ wget -qO- https://raw.githubusercontent.com/pardus-bireysel/pardus-bireysel/remo
 7. KDE ilk defa açıldıktan sonra belirli bir script çalıştırmak (cli/tui, pre/post-conf.sh) - (pardus-kde-greeter, hoşgeldin uygulaması)
 8. Pardus Bireysel betiğini arayüz olarak çalıştırabilecek bir GTK uygulaması yazmak (bu scriptlerin kullanım ömrünün dolması)
 9. Kullanıcı dostu yeni Pardus araçları için çalışmaya başlanması (harici depolarda)
+
+### Geliştirici Notları:
+1. Comment Anchor eklentisini kullanın (veya kodlar içinde TODO/REVIEW/NOTE/FIXME anahtar kelimelerini aratın)
+2. Spellcheck eklentisini kurun (veya terminalden çalıştırın), dosyalar arası çalışmak için `-x` argümanını kullanmayı unutmayın
+3. Bash IDE eklentisini kurun
