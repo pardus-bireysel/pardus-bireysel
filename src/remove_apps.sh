@@ -18,16 +18,14 @@ _remove() {
 APPS_TO_BE_REMOVED=("gimp" "icedtea-netx" "thunar" "mousepad")
 KEEP_APPS_IN_XFCE=("thunar" "mousepad")
 
-# for item in "${APPS_TO_BE_REMOVED[@]}"; do
+for item in "${APPS_TO_BE_REMOVED[@]}"; do
+  _remove "$item"
+done
 
-# _remove "$item"
-# done
-
-_log "$DESKTOP_ENVIRONMENT"
+_log "$DESKTOP_ENVIRONMENT" verbose
 ## FIXME !!! DESKTOP_ENVRONMENT gets defaults value back after common.sh sourced again in 9th line
 ## Possible solution1: use config file (read/write)
-## Possible solution2: Move changeble variable to another file and try to make it wirt export variables 
-
+## Possible solution2: Move changeble variable to another file and try to make it wirt export variables
 
 # TODO Uygulamayı silmeden önce uygulamanın olup olmadığı kontrol edilebilir
 # TODO error handling, silme işlemi hata verirse veya kabuk hata kodu dönerse kullanıcı bilgilendirilmeli
