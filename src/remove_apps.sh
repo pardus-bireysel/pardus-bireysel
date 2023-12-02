@@ -11,7 +11,7 @@ source "$DIR/../common.sh"
 #removes app with package name
 _remove() {
   _log "$1" verbose
-  sudo apt purge "$1"
+  sudo apt purge "$1" -y
   _log "$1" ok
 }
 
