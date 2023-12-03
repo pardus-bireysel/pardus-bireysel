@@ -60,7 +60,7 @@ _prechecks() {
 # download other configs from git provider
 _download() {
   _log "Yapılandırma dosyaları $git_provider_name üzerinden indiriliyor" info
-  if [[ $(_gc PARDUS_DEV_MODE) -eq 1 ]]; then
+  if [[ $(_gc "ENABLE_DEV_MODE") -eq 1 ]]; then
     wget -O "$temp_file" "${git_repo_dest}/archive/${git_repo_tag}.tar.gz"
   else
     wget -qO "$temp_file" "${git_repo_dest}/archive/${git_repo_tag}.tar.gz"
