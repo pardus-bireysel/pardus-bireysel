@@ -7,7 +7,7 @@
 # wget -qO- https://raw.githubusercontent.com/pardus-bireysel/pardus-bireysel/main/install.sh | bash <(cat) </dev/tty
 
 # Error Handling
-set -e
+set -e                       # REVIEW $? will not work!!!
 trap _interrupt HUP INT TERM # REVIEW
 trap _cleanup EXIT           # REVIEW
 
@@ -27,7 +27,6 @@ _prechecks() {
       echo "Devam Etmek İstiyor Musunuz"
       _continue_confirmation
     else
-      # TODO GNOME / XFCE masaüstü dağıtımı tespit etme
       _log "Pardus 23.0 sürümü saptandı" info
       sleep 0.1
       _log "Kurulum için gereksinimler sağlanmakta" ok
@@ -38,7 +37,7 @@ _prechecks() {
 
   # REVIEW Meb internetini kullanmak için setifika kurmak lazım ama son kullanıcının şimdilik ihtiyacı olmaz. Ileride opsiyonel olarak ayarlanabilir
   # _log "Eğer Fatih/MEB internetine ethernet ile bağlı iseniz Sertifika kurmanız gerekebilir. Sertifikayı kurmak istiyor musunuz?" warn
-  # if _checkanswer -eq 1; then
+  # if _checkanswer 1; then
   #   _log "MEB sertifikası indiriliyor..." verbose
   #   timeout 10 wget -qO "$temp_file" "http://sertifika.meb.gov.tr/MEB_SERTIFIKASI.cer" || (_log "Sertifikayı yüklemeye çalışırken bir hata oluştu" fatal)
 
@@ -60,16 +59,34 @@ _prechecks() {
 
 # download other configs from git provider
 _download() {
-  wget -O "$temp_file" "${git_repo_dest}/archive/${git_repo_tag}.tar.gz"
-  _log "Yapılandırma dosyalarının son sürümleri $git_provider_name üzerinden indirildi" ok
+  _log "Yapılandırma dosyaları $git_provider_name üzerinden indiriliyor" info
+  if [[ $(_gc PARDUS_DEV_MODE) -eq 1 ]]; then
+    wget -O "$temp_file" "${git_repo_dest}/archive/${git_repo_tag}.tar.gz"
+  else
+    wget -qO "$temp_file" "${git_repo_dest}/archive/${git_repo_tag}.tar.gz"
+  fi
+  _log "Yapılandırma dosyalarının son sürümleri $git_provider_name üzerinden indirildi" verbose
 
   tar -xzf "$temp_file" -C "$temp_dir"
   _log "Arşiv, $temp_dir dizinine ayıklandı" verbose
+
+  wait_download=0
+}
+
+_preconfigs() { 
+  # Şimdilik XFCE olduğunu varsayalım # REVIEW
+  _uc "DESKTOP_ENVIRONMENT" "xfce"
+
+  _log "Masaüstü ortamınızı KDE Plasma ile değiştirmek ister misiniz?" warn
+  if _checkanswer 1; then
+    _uc "DESKTOP_ENVIRONMENT" "plasma"
+  fi
+  _logconf "DESKTOP_ENVIRONMENT"
 }
 
 # clear cache, delete temporary files
 _cleanup() {
-  if [[ _DISABLE_CLEANUP -eq 1 ]]; then
+  if [[ $(_gc "DEV_DISABLE_CLEANUP") -eq 1 ]]; then
     _log "Cleanup Disabled, you can see files in $temp_dir" verbose
     exit
   else
@@ -87,44 +104,32 @@ _interrupt() {
 }
 
 ### MAIN ###
-#TODO Advanced Argument/Flag Handling, see: https://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash , https://www.redhat.com/sysadmin/arguments-options-bash-scripts and https://www.assertnotmagic.com/2019/03/08/bash-advanced-arguments/#TODO Help text (tr)
-#TODO Man pages (tr-en)
-echo "$@"
+
 if [[ "$1" == "dev" ]]; then
   _log "Geliştirici Modundasınız, ne yaptığınızı bilmiyorsanız bu betiği sonlandırınız!!!" warn
-  source development.sh # ANCHOR[id=source_development]
-  _PARDUS_DEV_MODE=1
-  # _ENABLE_SLEEP=1 # Uncomment if you want to wait in dev mode
-  # _DISABLE_CLEANUP=1
-  _sleep 5
-
+  source development.sh
   if [[ "$2" == "remote-run" ]]; then
     _DEV_RUN "remote" "$3"
   elif [[ "$2" == "local-run" ]]; then
     _DEV_RUN "local"
-  else
+  elif [[ "$2" == "" ]]; then
+    _DEV_RUN "tmp"
     __TMP_DEV "$@"
     exit
   fi
 fi
 
-_sleep 6
+_sleep 1
 echo -e "$ORANGE $PARDUS_LOGO $NC \nPARDUS BİREYSEL - KURULUM BETİĞİ"
 _sleep 1
 
-if [[ "_DISABLE_PRECHECKS" -eq 0 ]]; then
+if [[ $(_gc "DEV_DISABLE_PRECHECKS") -eq 0 ]]; then
   _prechecks
 fi
-if [[ "_DISABLE_DOWNLOAD" -eq 0 ]]; then
+if [[ $(_gc "DEV_DISABLE_DOWNLOAD") -eq 0 ]]; then
   _download
 fi
-
-_log "Masaüstü ortamınızı KDE Plasma ile değiştirmek ister misiniz?" warn
-if _checkanswer -eq 0; then
-  DESKTOP_ENVIRONMENT="xfce"
-fi
-echo "$DESKTOP_ENVIRONMENT"
-# TODO GNOME'u da algıla ve buraya ekle
+_preconfigs
 
 _run_script "remove_apps.sh"
 # _run_script "kde_install.sh"

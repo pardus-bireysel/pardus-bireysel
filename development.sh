@@ -6,21 +6,17 @@
 ### Development functions to use in other files while testing ###
 
 source ./common.sh
-# REVIEW sourcing common.sh here again actually overrides common.sh values from install.sh
-### WORKAROUND -> source this file (develpoment.sh) before variable assign line. See LINK install.sh#source_development
 
 # Temporary Development/Test Section
 __TMP_DEV() {
   _log "--- Geçici Geliştirici Fonksiyonu Başlatıldı ---\n" info
-  if [[ "$#" -eq 0 ]]; then
+  if [[ "$#" -eq 1 ]]; then
     _log "there is no passed variables" verbose
   else
     _log "passed variables: $(_list_arguments "$@")" verbose newline
   fi
   #########################################
   ########## TEMPORARY TEST AREA ##########
-
-  echo "$_PARDUS_DEV_MODE"
 
   #########################################
   #########################################
@@ -29,15 +25,23 @@ __TMP_DEV() {
 
 # run code as developer in remote or local mode
 _DEV_RUN() {
-  echo "$_PARDUS_DEV_MODE"
   if [[ "$1" == "remote" ]]; then
     git_repo_tag="$2"
     src_dir="$temp_dir/$git_repo_name-$git_repo_tag/src/"
     _log "Branch değiştirildi: ${git_repo_tag}" info
-  elif [[ "$1" == "local" ]]; then
-    _DISABLE_DOWNLOAD=1
-    _DISABLE_PRECHECKS=1 # optional
-    cp -r ./ "$temp_dir/LOCAL/"
-    src_dir="$temp_dir/LOCAL/src/"
+    wait_download=1
+  else
+    if [[ "$1" == "local" ]]; then
+      cp -r ./ "$temp_dir/LOCAL/"
+      src_dir="$temp_dir/LOCAL/src/"
+      _uc "DEV_DISABLE_DOWNLOAD" 1
+      _uc "DEV_DISABLE_PRECHECKS" 1 # optional
+    elif [[ "$1" == "tmp" ]]; then
+      cp -r ./ "$temp_dir/LOCAL/"
+      src_dir="$temp_dir/LOCAL/src/"
+    fi
+    _uc "ENABLE_DEV_MODE" 1
+    # _uc "DEV_ENABLE_SLEEP" 1 # Uncomment if you want to wait in dev mode
+    _uc "DEV_DISABLE_CLEANUP" 1
   fi
 }
