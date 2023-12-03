@@ -11,7 +11,7 @@ source "$DIR/../common.sh"
 
 #removes app with package name
 _remove() {
-  _log "Uygulama siliniyor: $1" verbose
+  _log "Uygulama siliniyor: $1" v
   sudo apt purge "$1" -y
   _log "Uygulama silindi: $1" ok
 }

@@ -9,18 +9,18 @@ source ./common.sh
 
 # Temporary Development/Test Section
 __TMP_DEV() {
-  _log "--- Geçici Geliştirici Fonksiyonu Başlatıldı ---\n" info
+  _log "--- Geçici Geliştirici Fonksiyonu Başlatıldı ---" i nl
   if [[ "$#" -eq 1 ]]; then
-    _log "there is no passed variables" verbose
+    _log "there is no passed variables" v
   else
-    _log "passed variables: $(_list_arguments "$@")" verbose newline
+    _log "passed variables: $(_list_arguments "$@")" v nl
   fi
   #########################################
   ########## TEMPORARY TEST AREA ##########
 
   #########################################
   #########################################
-  _log "--- Geçici Geliştirici Fonksiyonu Sonlandırıldı ---\n\n" info
+  _log "--- Geçici Geliştirici Fonksiyonu Sonlandırıldı ---\n" i nl
 }
 
 # run code as developer in remote or local mode
@@ -28,7 +28,7 @@ _DEV_RUN() {
   if [[ "$1" == "remote" ]]; then
     git_repo_tag="$2"
     src_dir="$temp_dir/$git_repo_name-$git_repo_tag/src/"
-    _log "Branch değiştirildi: ${git_repo_tag}" info
+    _log "Branch değiştirildi: ${git_repo_tag}" i
     wait_download=1
   else
     if [[ "$1" == "local" ]]; then

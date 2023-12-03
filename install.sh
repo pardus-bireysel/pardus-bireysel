@@ -27,7 +27,7 @@ _prechecks() {
       echo "Devam Etmek İstiyor Musunuz"
       _continue_confirmation
     else
-      _log "Pardus 23.0 sürümü saptandı" info
+      _log "Pardus 23.0 sürümü saptandı" i
       sleep 0.1
       _log "Kurulum için gereksinimler sağlanmakta" ok
     fi
@@ -59,16 +59,16 @@ _prechecks() {
 
 # download other configs from git provider
 _download() {
-  _log "Yapılandırma dosyaları $git_provider_name üzerinden indiriliyor" info
+  _log "Yapılandırma dosyaları $git_provider_name üzerinden indiriliyor" i
   if [[ $(_gc "ENABLE_DEV_MODE") -eq 1 ]]; then
     wget -O "$temp_file" "${git_repo_dest}/archive/${git_repo_tag}.tar.gz"
   else
     wget -qO "$temp_file" "${git_repo_dest}/archive/${git_repo_tag}.tar.gz"
   fi
-  _log "Yapılandırma dosyalarının son sürümleri $git_provider_name üzerinden indirildi" verbose
+  _log "Yapılandırma dosyalarının son sürümleri $git_provider_name üzerinden indirildi" v
 
   tar -xzf "$temp_file" -C "$temp_dir"
-  _log "Arşiv, $temp_dir dizinine ayıklandı" verbose
+  _log "Arşiv, $temp_dir dizinine ayıklandı" v
 
   wait_download=0
 }
@@ -87,19 +87,19 @@ _preconfigs() {
 # clear cache, delete temporary files
 _cleanup() {
   if [[ $(_gc "DEV_DISABLE_CLEANUP") -eq 1 ]]; then
-    _log "Cleanup Disabled, you can see files in $temp_dir" verbose
+    _log "Cleanup Disabled, you can see files in $temp_dir" v
     exit
   else
-    _log "Geçici Dosyalar Temizleniyor ..." info
+    _log "Geçici Dosyalar Temizleniyor ..." i
     rm -rf "$temp_file" "$temp_dir"
-    _log "Dosyalar Temizlendi!" "done"
+    _log "Dosyalar Temizlendi!" ok
     exit
   fi
 }
 
 # interrupted by user
 _interrupt() {
-  _log "Betik kullanıcı tarafından erken sonlandırılıyor" err newline
+  _log "Betik kullanıcı tarafından erken sonlandırılıyor" err nl
   _cleanup
 }
 
@@ -128,6 +128,7 @@ if [[ $(_gc "DEV_DISABLE_PRECHECKS") -eq 0 ]]; then
 fi
 if [[ $(_gc "DEV_DISABLE_DOWNLOAD") -eq 0 ]]; then
   _download
+  _uc "ENABLE_DEV_MODE" 1
 fi
 _preconfigs
 

@@ -70,28 +70,27 @@ export PARDUS_LOGO
 
 # feature rich logs with color support
 _log() {
-  # REVIEW aynı tür logları birden fazla kelime ile kabul etmek mantıklı mı? Gerek var mı?
   case "$2" in
-  fatal | panic)
+  panic)
     echo -e "${RED}[ ⚠⚠⚠ ]${NC} $1 ${RED}ABORTING...${NC}"
     exit
     ;;
-  error | err) echo -e "${RED}[ !!! ]${NC} $1" ;;
-  warning | warn) echo -e "${ORANGE}[ ⚠ ]${NC} $1" ;;
-  ok | okey | done | success) echo -e "${GREEN}[ ✔ ]${NC} $1" ;;
-  DONE | OK) echo -e "${GREEN}[ ✔ ] $1 ${NC}" ;;
-  info | inf | status) echo -e "${CYAN}[ i ]${NC} $1" ;;
-  verbose | v | verb) if [[ $(_gc "ENABLE_DEV_MODE") -eq 1 ]]; then echo -e "${GRAY}$1${NC}"; fi ;;
+  err) echo -e "${RED}[ !!! ]${NC} $1" ;;
+  warn) echo -e "${ORANGE}[ ⚠ ]${NC} $1" ;;
+  ok) echo -e "${GREEN}[ ✔ ]${NC} $1" ;;
+  OK) echo -e "${GREEN}[ ✔ ] $1 ${NC}" ;;
+  i) echo -e "${CYAN}[ i ]${NC} $1" ;;
+  v) if [[ $(_gc "ENABLE_DEV_MODE") -eq 1 ]]; then echo -e "${GRAY}$1${NC}"; fi ;;
   *) echo -e "$1" ;;
   esac
 
   case "$3" in
-  newline | nl | new | newl) echo " " ;;
+  nl) echo " " ;;
   esac
 }
 
 _logconf() {
-  _log "$1=$(_gc "$1")" verbose
+  _log "$1=$(_gc "$1")" v
 }
 
 # sleep if development mode not activated
@@ -102,7 +101,7 @@ _sleep() {
     if [[ $(_gc "DEV_DISABLE_SLEEP") -eq 1 ]]; then
       sleep "$1"
     else
-      _log "sleep skipped" verbose
+      _log "sleep skipped" v
     fi
   fi
 }
@@ -122,7 +121,7 @@ _run_script() {
     _sudo_run bash "$src_dir/${1}"
   else
     _log "File \"${1}\" not exist" err
-    _log "Source Dir: $src_dir" verbose
+    _log "Source Dir: $src_dir" v
   fi
 }
 
@@ -164,7 +163,7 @@ _checkanswer() {
 _continue_confirmation() {
   read -p "(e/H)? " -r choice
   if _checkinput "$choice" 0; then
-    _log "Betik İptal Edildi" info
+    _log "Betik İptal Edildi" i
     exit
   fi
 }
