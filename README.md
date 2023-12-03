@@ -2,14 +2,17 @@
 Pardus XFCE sürümünü Pardus KDE Bireysel sürümüne dönüştüren kod betiği
 
 ## Kurulum
-### Ana Kol için kurulum
+### Kararlı Sürüm Kurulumu
 ```bash
-wget -qO- https://raw.githubusercontent.com/pardus-bireysel/pardus-bireysel/main/install.sh | bash <(cat) </dev/tty
+git clone https://github.com/pardus-bireysel/pardus-bireysel/
+cd pardus-bireysel
+./install.sh
 ```
-### remove-unnecessary-apps kolu için GELİŞTİRİCİ Kurulumu
+### Geliştirici Sürümü Kurulumu
 ```bash
-wget -qO- https://raw.githubusercontent.com/pardus-bireysel/pardus-bireysel/remove-unnecessary-apps/install.sh | bash <(cat) </dev/tty dev branch remove-unnecessary-apps
+./install.sh dev remote-run BRANCH # BRANCH'ı geliştirmekte olduğunuz kol ile değiştirin
 ```
+
 ### Yerel Kurulum
 ```bash
 ./install.sh dev local-run
