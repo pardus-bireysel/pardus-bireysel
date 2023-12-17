@@ -69,6 +69,9 @@ export PARDUS_LOGO
 ### GENERAL FUNCTIONS ###
 
 # feature rich logs with color support
+# $1           : log text
+# $2 (optional): v, i, ok, OK, warn, err, panic
+# $3 (optional): nl 
 _log() {
   case "$2" in
   panic)
@@ -78,7 +81,7 @@ _log() {
   err) echo -e "${RED}[ !!! ]${NC} $1" ;;
   warn) echo -e "${ORANGE}[ ⚠ ]${NC} $1" ;;
   ok) echo -e "${GREEN}[ ✔ ]${NC} $1" ;;
-  OK) echo -e "${GREEN}[ ✔ ] $1 ${NC}" ;;
+  OK) echo -e "${GREEN}[ ✔ ]  $1 ${NC}" ;;
   i) echo -e "${CYAN}[ i ]${NC} $1" ;;
   v) if [[ $(_gc "ENABLE_DEV_MODE") -eq 1 ]]; then echo -e "${GRAY}$1${NC}"; fi ;;
   *) echo -e "$1" ;;
