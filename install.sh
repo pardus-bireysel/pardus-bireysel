@@ -26,6 +26,9 @@ _prechecks() {
       _log "Bu betik Pardus Dağıtımının sadece 23.0 sürümü ile test edilmiştir. Kodun belirli kısımları çalışmayabilir" warn
       echo "Devam Etmek İstiyor Musunuz"
       _continue_confirmation
+
+      # TODO GNOME / XFCE masaüstü dağıtımı tespit et, OLD_DESKTOP_ENVIRONMENT olarak ata
+      # TODO OLD_DESKTOP_ENVIRONMENT ve NEW_DESKTOP_ENVIRONMENT olarak değişkenleri ayır
     else
       _log "Pardus 23.0 sürümü saptandı" i
       sleep 0.1
@@ -73,8 +76,9 @@ _download() {
   wait_download=0
 }
 
-_preconfigs() { 
+_preconfigs() {
   # Şimdilik XFCE olduğunu varsayalım # REVIEW
+  # TODO Sonrasında OLD_DEKSTOP_ENVIRONMENT ve NEW_DESKTOP_ENVIRONMENT olarak ayrılmış şeklini handle et
   _uc "DESKTOP_ENVIRONMENT" "xfce"
 
   _log "Masaüstü ortamınızı KDE Plasma ile değiştirmek ister misiniz?" warn
@@ -86,6 +90,8 @@ _preconfigs() {
 
 # clear cache, delete temporary files
 _cleanup() {
+  # FIXME running 2 times on exit and sed gives error when could not find config file
+
   if [[ $(_gc "DEV_DISABLE_CLEANUP") -eq 1 ]]; then
     _log "Cleanup Disabled, you can see files in $temp_dir" v
     exit

@@ -42,6 +42,6 @@ _DEV_RUN() {
     fi
     _uc "ENABLE_DEV_MODE" 1
     # _uc "DEV_ENABLE_SLEEP" 1 # Uncomment if you want to wait in dev mode
-    _uc "DEV_DISABLE_CLEANUP" 1
+    # _uc "DEV_DISABLE_CLEANUP" 1 # Uncomment if you want to disable cleanup (where /tmp) in dev mode
   fi
 }

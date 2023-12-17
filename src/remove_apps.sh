@@ -13,6 +13,13 @@ source "$DIR/../common.sh"
 _remove() {
   _log "Uygulama siliniyor: $1" v
   sudo apt purge "$1" -y
+
+  # TODO turn off apt logs if dev mode not enabled!
+
+  # TODO Uygulamayı silmeden önce uygulamanın olup olmadığı kontrol edilebilir
+
+  # FIXME error handling, uygulama silme işlemi hata verirse veya kabuk hata kodu dönerse kullanıcı bilgilendirilmeli
+
   _log "Uygulama silindi: $1" ok
 }
 
@@ -43,7 +50,7 @@ GNOME_APPS=("nautilus" "gedit" "brasero"
   "gdm3"
 )
 
-_logconf "DESKTOP_ENVIRONMENT"
+_logconf "DESKTOP_ENVIRONMENT" i
 
 for item in "${COMMON_APPS[@]}"; do
   _remove "$item"
@@ -61,6 +68,6 @@ if [[ $(_gc "DESKTOP_ENVIRONMENT") != "gnome" ]]; then
   done
 fi
 
-sudo apt-get -y autoremove
-sudo apt-get -y clean
-sudo apt-get -y autoclean
+sudo apt autoremove -y 
+sudo apt clean -y 
+sudo apt autoclean -y 

@@ -90,7 +90,11 @@ _log() {
 }
 
 _logconf() {
-  _log "$1=$(_gc "$1")" v
+  if [[ "$#" -eq 1 ]]; then
+    _log "$1=$(_gc "$1")" v
+  else
+    _log "$1=$(_gc "$1")" "$2"
+  fi
 }
 
 # sleep if development mode not activated
@@ -183,6 +187,8 @@ _gc() {
     value=$(sed -nr "{ :l /^$1[ ]*=/ { s/[^=]*=[ ]*//; p; q;}; n; b l;} " "$src_dir/$config_file") # REVIEW
   fi
   echo "$value"
+
+  # TODO Değişken mevcut değilse veya UNDEFINED ise hata kodu verilmeli
 }
 
 # update config
@@ -190,6 +196,8 @@ _gc() {
 # $2: value to be updated (e.g. xfce)
 _uc() {
   sed -i "s/\($1 *= *\).*/\1$2/" "$src_dir/$config_file" # REVIEW
+
+  # TODO Değişken mevcut değilse yenisi oluşturulmalı (öncesinde verbose veya info çıktısı ile bilgilendirilmeli)
 }
 
 ### DEVELOPMENT HELPER FUNCTIONS ###
