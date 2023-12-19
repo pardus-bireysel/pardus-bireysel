@@ -1,162 +1,21 @@
 #!/bin/bash
 
-## PATH:
-# 1. Gereksiz Uygulamaları Kaldır - pardus-xfce-* uygulamalarını kaldır
-# 2. XFCE masaüstü ortamını KDE'ye dönüştür
-# 3. Gereksiz servislerin kapatılması
-# 4. KDE servislerinin düzenlenmesi ve gerekli önayarların yapılması
-# 5. Plasma ayarlarını kullanıcılar için en hazır şekilde ayarlamak
-# 6. GNOME masaüstünden dönüştürme desteği
-# 7. KDE ilk defa açıldıktan sonra belirli bir script çalıştırmak (cli/tui, pre/post-conf.sh)
-# 8. Pardus Bireysel betiğini arayüz olarak çalıştırabilecek bir GTK uygulaması yazmak (bu scriptlerin kullanım ömrünün dolması)
+# 2023 🄯 Pardus Bireysel Contributors
+# https://github.com/pardus-bireysel/pardus-bireysel
 
-# Kaldırılacak/Eylemde Bulunulacak Uygulamalar:
-# Catfish
-# Brasero
-# malcontent-gui (ebeveyn yönetimi)
-# firefox-esr -> firefox
-# gimp
-# ibus
-# thunar? - yerine dolphin
-# xfce uygulamaları -> kde uygulamaları
-
-## QUICK TEST:
+## QUICK TEST (for main branch) :
 # wget -qO- https://raw.githubusercontent.com/pardus-bireysel/pardus-bireysel/main/install.sh | bash <(cat) </dev/tty
 
 # Error Handling
-set -e
+set -e                       # REVIEW $? will not work!!!
 trap _interrupt HUP INT TERM # REVIEW
 trap _cleanup EXIT           # REVIEW
 
-#               #
-### VARIABLES ###
-#               #
-AUTHOR="pardus-bireysel"
-temp_file="$(mktemp -u)"
-temp_dir="$(mktemp -d)"
-git_provider_name="GitHub"
-git_provider_url="https://github.com"
-git_repo_name="pardus-bireysel"
-git_repo_dest="$git_provider_url/$AUTHOR/$git_repo_name"
-git_repo_tag="main"
+source ./common.sh
 
-# src_dir="$temp_dir/$git_repo_name-$git_repo_tag/src/"
-
-# user=$([ -n "$SUDO_USER" ] && echo "$SUDO_USER" || echo "$USER")
-# home="/home/${user}"
-
-#                 #
-### COLOR CODES ###
-#                 #
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-ORANGE='\033[0;33m'
-CYAN='\033[0;36m'
-GRAY='\033[0;37m \e[3m'
-NC='\033[0m \e[0m' # No Color, No Effect
-# BOLD='\033[1;97m'
-
-sleep 1
-echo -e "$ORANGE"
-cat <<-EOF
- .smNdy+-    \`.:/osyyso+:.\`    -+ydmNs.
-/Md- -/ymMdmNNdhso/::/oshdNNmdMmy/. :dM/
-mN.     oMdyy- -y          \`-dMo     .Nm
-.mN+\`  sMy hN+ -:             yMs  \`+Nm.
- \`yMMddMs.dy \`+\`               sMddMMy\`
-   +MMMo  .\`  .                 oMMM+
-   \`NM/    \`\`\`\`\`.\`    \`.\`\`\`\`\`    +MN\`
-   yM+   \`.-:yhomy    ymohy:-.\`   +My
-   yM:          yo    oy          :My
-   +Ms         .N\`    \`N.      +h sM+
-   \`MN      -   -::::::-   : :o:+\`NM\`
-    yM/    sh   -dMMMMd-   ho  +y+My
-    .dNhsohMh-//: /mm/ ://-yMyoshNd\`
-      \`-ommNMm+:/. oo ./:+mMNmmo:\`
-     \`/o+.-somNh- :yy: -hNmos-.+o/\`
-    ./\` .s/\`s+sMdd+\`\`+ddMs+s\`/s. \`/.
-        : -y.  -hNmddmNy.  .y- :
-         -+       \`..\`       +-
-EOF
-echo -e "${NC}PARDUS BİREYSEL - KURULUM BETİĞİ"
-sleep 1
-
-#               #
 ### FUNCTIONS ###
-#               #
 
-#run with sudo if $2 is not executable
-_sudo() {
-  if [ -x "$2" ]; then
-    "$@"
-  else
-    sudo "$@"
-  fi
-}
-
-#feature rich logs with color support
-_log() {
-  case "$3" in
-  newline) echo " " ;;
-  esac
-
-  case "$2" in
-  fatal | panic)
-    echo -e "${RED}[ ⚠⚠⚠ ]${NC} $1 ${RED}ABORTING...${NC}"
-    exit
-    ;;
-  error | err) echo -e "${RED}[ !!! ]${NC} $1" ;;
-  warning | warn) echo -e "${ORANGE}[ ⚠ ]${NC} $1" ;;
-  ok | okey | done | success) echo -e "${GREEN}[ ✔ ]${NC} $1" ;;
-  DONE | OK) echo -e "${GREEN}[ ✔ ] $1 ${NC}" ;;
-  info | inf | status) echo -e "${CYAN}[ i ]${NC} $1" ;;
-  verbose | v | verb) echo -e "${GRAY}$1${NC}" ;;
-  *) echo -e "$1" ;;
-  esac
-}
-
-#check input and return boolean value
-_checkinput() {
-  case "$1" in
-  y | Y | e | E | [yY][eE][sS]) return 1 ;;
-  [eE][vV]][eE][tT]) return 1 ;;
-  [Yy]*) return 1 ;;
-  [Ee]*) return 1 ;;
-  "" | " ") return 1 ;;
-  n | N | H | h | *) return 0 ;;
-  esac
-  # TODO bazı durumlarda varsayılan enter işlevinin 0 dönmesi istenebilir! Burada 0 mı dönüyor 1 mi???
-  # Default halini degisken olarak ekle
-}
-
-#auto ask question, check answer and return boolean value
-_checkanswer() {
-  read -p "(E/H)? " -r choice
-  if _checkinput "$choice" -eq 1; then
-    return 1
-  else
-    return 0
-  fi
-
-}
-
-#check input and exit if user not confirm progress
-_continue_confirmation() {
-  read -p "(E/H)? " -r choice
-  if _checkinput "$choice" -eq 0; then
-    _log "Betik İptal Edildi" info
-    exit
-  fi
-}
-
-#temporary development playground
-_TMP_DEV() {
-  _log "\n\n --- Geliştirici Fonksiyonu Başlatıldı ---\n" info
-
-  _log "\n --- Geliştirici Fonksiyonu Sonlandırıldı ---\n\n" info
-}
-
-#prechecks for starting script
+# prechecks for starting script
 _prechecks() {
   if [ "$(awk -F'^ID=' '{print $2}' /etc/os-release | awk 'NF')" != "pardus" ]; then
     _log "Bu betik sadece GNU/Linux Pardus Dağıtımında (23.0 sürümü) test edilmiştir, farklı bir sistem için devam etmek betiğin çalışmaması ile sonuçlanabilir!" err
@@ -167,9 +26,11 @@ _prechecks() {
       _log "Bu betik Pardus Dağıtımının sadece 23.0 sürümü ile test edilmiştir. Kodun belirli kısımları çalışmayabilir" warn
       echo "Devam Etmek İstiyor Musunuz"
       _continue_confirmation
+
+      # TODO GNOME / XFCE masaüstü dağıtımı tespit et, OLD_DESKTOP_ENVIRONMENT olarak ata
+      # TODO OLD_DESKTOP_ENVIRONMENT ve NEW_DESKTOP_ENVIRONMENT olarak değişkenleri ayır
     else
-      # TODO GNOME / XFCE masaüstü dağıtımı tespit etme
-      _log "Pardus 23.0 sürümü saptandı" info
+      _log "Pardus 23.0 sürümü saptandı" i
       sleep 0.1
       _log "Kurulum için gereksinimler sağlanmakta" ok
     fi
@@ -179,7 +40,7 @@ _prechecks() {
 
   # REVIEW Meb internetini kullanmak için setifika kurmak lazım ama son kullanıcının şimdilik ihtiyacı olmaz. Ileride opsiyonel olarak ayarlanabilir
   # _log "Eğer Fatih/MEB internetine ethernet ile bağlı iseniz Sertifika kurmanız gerekebilir. Sertifikayı kurmak istiyor musunuz?" warn
-  # if _checkanswer -eq 1; then
+  # if _checkanswer 1; then
   #   _log "MEB sertifikası indiriliyor..." verbose
   #   timeout 10 wget -qO "$temp_file" "http://sertifika.meb.gov.tr/MEB_SERTIFIKASI.cer" || (_log "Sertifikayı yüklemeye çalışırken bir hata oluştu" fatal)
 
@@ -199,56 +60,96 @@ _prechecks() {
   # fi
 }
 
-#download other configs from git provider
+_get_root() {
+    export SUDO_PROMPT="Bu script root yetkileriyle çalışır.\nLütfen kullanıcı şifrenizi giriniz: "
+    sudo true
+}
+
+# download other configs from git provider
 _download() {
-  wget -O "$temp_file" "${git_repo_dest}/archive/${git_repo_tag}.tar.gz"
-  _log "Yapılandırma dosyalarının son sürümleri $git_provider_name üzerinden indirildi" ok
+  _log "Yapılandırma dosyaları $git_provider_name üzerinden indiriliyor" i
+  if [[ $(_gc "ENABLE_DEV_MODE") -eq 1 ]]; then
+    wget -O "$temp_file" "${git_repo_dest}/archive/${git_repo_tag}.tar.gz"
+  else
+    wget -qO "$temp_file" "${git_repo_dest}/archive/${git_repo_tag}.tar.gz"
+  fi
+  _log "Yapılandırma dosyalarının son sürümleri $git_provider_name üzerinden indirildi" v
 
   tar -xzf "$temp_file" -C "$temp_dir"
-  _log "Arşiv, $temp_dir dizinine ayıklandı" verbose
+  _log "Arşiv, $temp_dir dizinine ayıklandı" v
+
+  wait_download=0
 }
 
-#configurations before installations
 _preconfigs() {
-  # TODO
-  echo "PRE CONFGIS HERE"
+  # Şimdilik XFCE olduğunu varsayalım # REVIEW
+  # TODO Sonrasında OLD_DEKSTOP_ENVIRONMENT ve NEW_DESKTOP_ENVIRONMENT olarak ayrılmış şeklini handle et
+  _uc "DESKTOP_ENVIRONMENT" "xfce"
+
+  _log "Masaüstü ortamınızı KDE Plasma ile değiştirmek ister misiniz?" warn
+  if _checkanswer 1; then
+    _uc "DESKTOP_ENVIRONMENT" "plasma"
+  fi
+  _logconf "DESKTOP_ENVIRONMENT"
 }
 
-_kdeinstall() {
-  # TODO
-  echo "KDE INSTALLATION HERE"
-}
-
-_postconfigs() {
-  # TODO
-  echo "POST CONFIGS HERE"
-}
-
-#clear cache, delete temporary files
+# clear cache, delete temporary files
 _cleanup() {
-  _log "Geçici Dosyalar Temizleniyor ..." info
-  rm -rf "$temp_file" "$temp_dir"
-  _log "Dosyalar Temizlendi!" "done"
-  exit
+  # FIXME running 2 times on exit and sed gives error when could not find config file
+
+  if [[ $(_gc "DEV_DISABLE_CLEANUP") -eq 1 ]]; then
+    _log "Cleanup Disabled, you can see files in $temp_dir" v
+    exit
+  else
+    _log "Geçici Dosyalar Temizleniyor ..." i
+    rm -rf "$temp_file" "$temp_dir"
+    _log "Dosyalar Temizlendi!" ok
+    exit
+  fi
 }
 
-#interrupted by user
+# restart lightdm to kick user to login screen
+_restart_lightdm() {
+    sudo systemctl restart lightdm
+}
+
+# interrupted by user
 _interrupt() {
-  _log "Betik kullanıcı tarafından erken sonlandırılıyor" err newline
+  _log "Betik kullanıcı tarafından erken sonlandırılıyor" err nl
   _cleanup
 }
 
-#          #
 ### MAIN ###
-#          #
 
 if [[ "$1" == "dev" ]]; then
-  _TMP_DEV
-  exit
+  _log "Geliştirici Modundasınız, ne yaptığınızı bilmiyorsanız bu betiği sonlandırınız!!!" warn
+  source development.sh
+  if [[ "$2" == "remote-run" ]]; then
+    _DEV_RUN "remote" "$3"
+  elif [[ "$2" == "local-run" ]]; then
+    _DEV_RUN "local"
+  elif [[ "$2" == "" ]]; then
+    _DEV_RUN "tmp"
+    __TMP_DEV "$@"
+    exit
+  fi
 fi
 
-_prechecks
-_download
+_sleep 1
+echo -e "$ORANGE $PARDUS_LOGO $NC \nPARDUS BİREYSEL - KURULUM BETİĞİ"
+_sleep 1
+
+if [[ $(_gc "DEV_DISABLE_PRECHECKS") -eq 0 ]]; then
+  _prechecks
+fi
+if [[ $(_gc "DEV_DISABLE_DOWNLOAD") -eq 0 ]]; then
+  _download
+  _uc "ENABLE_DEV_MODE" 1
+fi
 _preconfigs
-_kdeinstall
-_postconfigs
+_get_root
+
+_run_script "remove_apps.sh"
+# _run_script "kde_install.sh"
+# _run_script "kde_configurations.sh"
+_restart_lightdm
