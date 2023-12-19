@@ -141,6 +141,7 @@ _checkanswer() {
 }
 
 #check input and exit if user not confirm progress
+#girişi kontrol et ve kullanıcı ilerlemeyi onaylamazsa çık
 _continue_confirmation() {
   read -p "(E/H)? " -r choice
   if _checkinput "$choice" -eq 0; then
@@ -157,6 +158,7 @@ _TMP_DEV() {
 }
 
 #prechecks for starting script
+#scripti başlatmak için ön kontroller
 _prechecks() {
   if [ "$(awk -F'^ID=' '{print $2}' /etc/os-release | awk 'NF')" != "pardus" ]; then
     _log "Bu betik sadece GNU/Linux Pardus Dağıtımında (23.0 sürümü) test edilmiştir, farklı bir sistem için devam etmek betiğin çalışmaması ile sonuçlanabilir!" err
@@ -225,6 +227,7 @@ _postconfigs() {
 }
 
 #clear cache, delete temporary files
+#önbelleği temizle, geçici dosyaları sil
 _cleanup() {
   _log "Geçici Dosyalar Temizleniyor ..." info
   rm -rf "$temp_file" "$temp_dir"
