@@ -60,6 +60,11 @@ _prechecks() {
   # fi
 }
 
+_get_root() {
+    export SUDO_PROMPT="Bu script root yetkileriyle çalışır.\nLütfen kullanıcı şifrenizi giriniz: "
+    sudo true
+}
+
 # download other configs from git provider
 _download() {
   _log "Yapılandırma dosyaları $git_provider_name üzerinden indiriliyor" i
@@ -103,6 +108,11 @@ _cleanup() {
   fi
 }
 
+# restart lightdm to kick user to login screen
+_restart_lightdm() {
+    sudo systemctl restart lightdm
+}
+
 # interrupted by user
 _interrupt() {
   _log "Betik kullanıcı tarafından erken sonlandırılıyor" err nl
@@ -137,7 +147,9 @@ if [[ $(_gc "DEV_DISABLE_DOWNLOAD") -eq 0 ]]; then
   _uc "ENABLE_DEV_MODE" 1
 fi
 _preconfigs
+_get_root
 
 _run_script "remove_apps.sh"
 # _run_script "kde_install.sh"
 # _run_script "kde_configurations.sh"
+_restart_lightdm
