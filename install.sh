@@ -149,7 +149,8 @@ fi
 _preconfigs
 _get_root
 
+
+_run_script "kde_install.sh"
 _run_script "remove_apps.sh"
-# _run_script "kde_install.sh"
 # _run_script "kde_configurations.sh"
 _restart_lightdm
