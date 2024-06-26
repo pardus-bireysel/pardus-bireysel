@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 2023 🄯 Pardus Bireysel Contributors
+# 2023 - 2024 🄯 Pardus Bireysel Contributors
 # https://github.com/pardus-bireysel/pardus-bireysel
 
 ### Remove unnecessary applications from system ###
@@ -24,7 +24,7 @@ _remove() {
 }
 
 # SEE https://tracker.pardus.org.tr/ for packages
-COMMON_APPS=("gimp" "icedtea-netx" "audacious" "firefox-esr" "libreoffice")
+COMMON_APPS=("libreoffice" "gimp" "audacious" "firefox-esr" "drawing" "icedtea-netx")
 XFCE_APPS=("thunar" "mousepad" "ristretto" "xfburn"
   "xfce4" "xfce4-sensors-plugin"
   # "pardus-xfce-desktop"
@@ -52,8 +52,13 @@ GNOME_APPS=("nautilus" "gedit" "brasero"
 
 _logconf "DESKTOP_ENVIRONMENT" i
 
-for item in "${COMMON_APPS[@]}"; do
-  _remove "$item"
+# REVIEW Kullanıcıların silmek istemedikleri uygulamalar olabilir, tek tek sormak daha mantıklı
+
+for item in "${COMMON_APPS[@]}"; do 
+  _log "${item} uygulamasını silmek ister misiniz?" warn
+    if _checkanswer 1; then
+      _remove "$item"
+    fi
 done
 
 if [[ $(_gc "DESKTOP_ENVIRONMENT") != "xfce" ]]; then

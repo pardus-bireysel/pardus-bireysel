@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 2023 🄯 Pardus Bireysel Contributors
+# 2023 - 2024 🄯 Pardus Bireysel Contributors
 # https://github.com/pardus-bireysel/pardus-bireysel
 
 ## QUICK TEST (for main branch) :
@@ -18,50 +18,29 @@ source ./common.sh
 # prechecks for starting script
 _prechecks() {
   if [ "$(awk -F'^ID=' '{print $2}' /etc/os-release | awk 'NF')" != "pardus" ]; then
-    _log "Bu betik sadece GNU/Linux Pardus Dağıtımında (23.0 sürümü) test edilmiştir, farklı bir sistem için devam etmek betiğin çalışmaması ile sonuçlanabilir!" err
+    _log "Bu betik sadece GNU/Linux Pardus Dağıtımında test edilmiştir, farklı bir sistem için devam etmek betiğin çalışmaması ile sonuçlanabilir!" err
     echo "Devam Etmek İstiyor Musunuz"
     _continue_confirmation
   else
-    if [ "$(awk -F'^VERSION_ID=' '{print $2}' /etc/os-release | awk 'NF')" != '"23.0"' ]; then
-      _log "Bu betik Pardus Dağıtımının sadece 23.0 sürümü ile test edilmiştir. Kodun belirli kısımları çalışmayabilir" warn
+    if [ "$(awk -F'^VERSION_ID=' '{print $2}' /etc/os-release | awk 'NF')" != '"23.1"' ]; then
+      _log "Bu betik Pardus Dağıtımının sadece 23.1 sürümü ile test edilmiştir. Kodun belirli kısımları çalışmayabilir" warn
       echo "Devam Etmek İstiyor Musunuz"
       _continue_confirmation
 
       # TODO GNOME / XFCE masaüstü dağıtımı tespit et, OLD_DESKTOP_ENVIRONMENT olarak ata
       # TODO OLD_DESKTOP_ENVIRONMENT ve NEW_DESKTOP_ENVIRONMENT olarak değişkenleri ayır
     else
-      _log "Pardus 23.0 sürümü saptandı" i
+      _log "Pardus 23.1 sürümü saptandı" i
       sleep 0.1
       _log "Kurulum için gereksinimler sağlanmakta" ok
     fi
   fi
 
   sleep 0.2
-
-  # REVIEW Meb internetini kullanmak için setifika kurmak lazım ama son kullanıcının şimdilik ihtiyacı olmaz. Ileride opsiyonel olarak ayarlanabilir
-  # _log "Eğer Fatih/MEB internetine ethernet ile bağlı iseniz Sertifika kurmanız gerekebilir. Sertifikayı kurmak istiyor musunuz?" warn
-  # if _checkanswer 1; then
-  #   _log "MEB sertifikası indiriliyor..." verbose
-  #   timeout 10 wget -qO "$temp_file" "http://sertifika.meb.gov.tr/MEB_SERTIFIKASI.cer" || (_log "Sertifikayı yüklemeye çalışırken bir hata oluştu" fatal)
-
-  #   _log ".cer uzantılı sertifika dosyası .crt uzantılı sertifika dosyasına dönüştürülüyor..." verbose
-  #   openssl x509 -inform DER -in "$temp_file" -out "$temp_file"
-
-  #   _log "Sertifika /usr/local/share/ca-certificates/ dizinine taşınıyor" verbose
-  #   sudo mv "$temp_file" "/usr/local/share/ca-certificates/MEB_SERTIFIKASI.crt"
-
-  #   _log "Sertifika dosyasına gerekli izinler veriliyor" verbose
-  #   sudo chmod 644 /usr/local/share/ca-certificates/MEB_SERTIFIKASI.crt
-
-  #   _log "Sertifikalar yenileniyor..." verbose
-  #   sudo update-ca-certificates
-
-  #   _log "MEB Sertifikası başarılı bir şekilde kuruldu, Tarayıcılara manuel olarak eklemeniz gerekebilir" "done"
-  # fi
 }
 
 _get_root() {
-    export SUDO_PROMPT="Bu script root yetkileriyle çalışır.\nLütfen kullanıcı şifrenizi giriniz: "
+    export SUDO_PROMPT="Bu script root yetkileriyle çalışır. Lütfen kullanıcı şifrenizi giriniz: "
     sudo true
 }
 
@@ -152,5 +131,6 @@ _get_root
 
 _run_script "kde_install.sh"
 _run_script "remove_apps.sh"
-# _run_script "kde_configurations.sh"
+_run_script "install_apps.sh"
+_run_script "kde_configurations.sh"
 _restart_lightdm
