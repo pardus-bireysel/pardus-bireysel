@@ -24,7 +24,7 @@ _install() {
 }
 
 # SEE https://tracker.pardus.org.tr/ for packages
-ESSENTIAL_APPS=("dolphin", )
+ESSENTIAL_APPS=("kwin-x11" "kwin" "dolphin")
 APPS=("firefox")
 
 
