@@ -1,6 +1,19 @@
 # pardus-bireysel
 Pardus XFCE sürümünü Pardus KDE Bireysel sürümüne dönüştüren kod betiği
 
+# install-kde Branchı TEST İÇİN
+```bash
+git clone https://github.com/pardus-bireysel/pardus-bireysel/
+cd pardus-bireysel
+git checkout origin/install-kde
+git pull
+git checkout install-kde
+git pull
+./install.sh dev local-run
+```
+
+
+<!-- 
 ## Kurulum
 ### Kararlı Sürüm Kurulumu
 ```bash
@@ -22,7 +35,7 @@ cd pardus-bireysel
 
 ## Dokümantasyon
 Dokümantasyon için https://pardus-bireysel.github.io/docs/ adresine gidiniz
-Debian tabanlı Pardus depoları kullanılarak oluşturulan özelleştirilmiş KDE sürümü
+Debian tabanlı Pardus depoları kullanılarak oluşturulan özelleştirilmiş KDE sürümü -->
 
 <!-- halak0013/pkde README.md -->
 <!-- ## Gnu/Linux dünyasında kişiselleştime deyince aklıma ilk kde geliyor. Neden
