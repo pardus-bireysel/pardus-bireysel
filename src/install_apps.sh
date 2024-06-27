@@ -12,7 +12,7 @@ source "$DIR/../common.sh"
 #removes app with package name
 _install() {
   _log "Uygulama indiriliyor ve yükleniyor: $1" v
-  sudo apt install "$1" -y
+  sudo apt install $1 -y
 
   # TODO turn off apt logs if dev mode not enabled!
 
@@ -24,17 +24,11 @@ _install() {
 }
 
 # SEE https://tracker.pardus.org.tr/ for packages
-ESSENTIAL_APPS=("kwin-x11" "kwin" "dolphin")
 APPS=("firefox")
-
-
-for item in ${ESSENTIAL_APPS[@]}"; do 
-    _install "$item"
-done
 
 for item in "${APPS[@]}"; do 
   _log "${item} uygulamasını yüklemek ister misiniz?" warn
     if _checkanswer 1; then
-      _install "$item"
+      _install $item
     fi
 done

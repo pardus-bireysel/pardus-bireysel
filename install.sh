@@ -66,6 +66,7 @@ _preconfigs() {
   _uc "DESKTOP_ENVIRONMENT" "xfce"
 
   _log "Masaüstü ortamınızı KDE Plasma ile değiştirmek ister misiniz?" warn
+  _log "Bu işlem yaklaşık 1GB veri kullanımına ve 2GB disk kullanımına sebep olur" i
   if _checkanswer 1; then
     _uc "DESKTOP_ENVIRONMENT" "plasma"
   fi
@@ -89,7 +90,7 @@ _cleanup() {
 
 # restart lightdm to kick user to login screen
 _restart_lightdm() {
-    sudo systemctl restart lightdm
+  sudo systemctl restart lightdm
 }
 
 # interrupted by user
@@ -129,8 +130,16 @@ _preconfigs
 _get_root
 
 
-_run_script "kde_install.sh"
-_run_script "remove_apps.sh"
-_run_script "install_apps.sh"
-_run_script "kde_configurations.sh"
-_restart_lightdm
+if [[ $(_gc "DESKTOP_ENVIRONMENT") == "plasma" ]]; then
+  echo -e "$INSTALLATION_NOTES $NC\n\n30 saniye bekleniyor..."
+  _sleep 30
+
+  _run_script "kde_install.sh"
+  _run_script "remove_apps.sh"
+  _run_script "install_apps.sh"
+  _run_script "kde_configurations.sh"
+  _restart_lightdm
+else
+  _log "Betik Sonlandırıldı - Herhangi bir değişiklik yapılmadı" warn
+fi
+

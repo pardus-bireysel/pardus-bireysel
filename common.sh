@@ -58,7 +58,20 @@ mN.     oMdyy- -y          \`-dMo     .Nm
     ./\` .s/\`s+sMdd+\`\`+ddMs+s\`/s. \`/.
         : -y.  -hNmddmNy.  .y- :
          -+       \`..\`       +-"""
-export PARDUS_LOGO
+
+INSTALLATION_NOTES="""
+----------------------------------------------------------------------------------------------------------
+|              Yükleme işlemi internet ve cihazınıza bağlı olarak 10 dakika kadar sürebilir              |
+| KDE paketleri yüklendikten sonra karşınıza çıkacak Display Manager seçme menüsünden "${RED}ligthdm${NC}"i seçiniz |
+|     Sonrasına XFCE/GNOME paketleri silinirken geçici olarak masaüstünüz/terminaliniz gözükmeyebilir    |
+|    Betik komple bittiği zaman Display Manager yeniden başlatılacak ve sizi giriş ekranına atacaktır    |
+|                   Giriş ekranından sağ alttan ${RED}Plasma(X11)${NC}'i seçmeniz gerekmektedir !                   |
+----------------------------------------------------------------------------------------------------------
+"""
+
+export PARDUS_LOGO INSTALLATION_NOTES
+
+
 
 # END OF VARIABLES !SECTION
 

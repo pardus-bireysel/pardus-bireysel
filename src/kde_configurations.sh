@@ -26,6 +26,6 @@ APPS_TO_REMOVE=("plasma-discover")
 for item in "${APPS_TO_REMOVE[@]}"; do 
   _log "${item} uygulamasını silmek ister misiniz?" warn
     if _checkanswer 1; then
-      _remove "$item"
+      _remove_unnecessary_kde_apps $item
     fi
 done
