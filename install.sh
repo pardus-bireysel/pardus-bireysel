@@ -88,9 +88,24 @@ _cleanup() {
   fi
 }
 
-# restart lightdm to kick user to login screen
-_restart_lightdm() {
-  sudo systemctl restart lightdm
+# restart system to kick user to renewed login screen
+_restart_system() {
+  _log "Kurulum İşlemi Tamamlandı - Cihazınız 20 saniye içinde yeniden başlatılacak" i nl
+  _log "Daha sonra başlatmak için bu betiği şimdi sonlandırabilirsiniz" err nl
+  _sleep 17
+  _log "5"
+  _sleep 1
+  _log "4"
+  _sleep 1
+  _log "3"
+  _sleep 1
+  _log "2"
+  _sleep 1
+  _log "1"
+  _sleep 1
+  _log "Sistem Yeniden Başlatılıyor" ok nl
+  _sleep 2
+  sudo reboot
 }
 
 # interrupted by user
@@ -138,7 +153,7 @@ if [[ $(_gc "DESKTOP_ENVIRONMENT") == "plasma" ]]; then
   _run_script "remove_apps.sh"
   _run_script "install_apps.sh"
   _run_script "kde_configurations.sh"
-  _restart_lightdm
+  _restart_system
 else
   _log "Betik Sonlandırıldı - Herhangi bir değişiklik yapılmadı" warn
 fi
