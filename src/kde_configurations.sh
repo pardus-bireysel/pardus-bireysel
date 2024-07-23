@@ -29,3 +29,6 @@ for item in "${APPS_TO_REMOVE[@]}"; do
       _remove_unnecessary_kde_apps $item
     fi
 done
+
+sudo update-alternatives --install "/usr/bin/x-session-manager" "x-session-manager" "/usr/bin/startplasma-x11" 60
+_log "KDE Plasma varsayılan oturum olarak ayarlandı" ok
