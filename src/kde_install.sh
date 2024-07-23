@@ -5,6 +5,5 @@
 
 # Plasma masaüstü ortamının yüklenmesi ve ilgili KDE uygulamalarının yüklenmesi
 
-sudo apt update -y
 sudo apt-get -y install kde-plasma-desktop
 # REVIEW kde-plasma-desktop vs kde-standard vs kde-full ???
