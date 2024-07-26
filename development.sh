@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 2023 🄯 Pardus Bireysel Contributors
+# 2023 - 2024 🄯 Pardus Bireysel Contributors
 # https://github.com/pardus-bireysel/pardus-bireysel
 
 ### Development functions to use in other files while testing ###
