@@ -47,11 +47,11 @@ _get_root() {
 # download other configs from git provider
 _download() {
   _log "Yapılandırma dosyaları $git_provider_name üzerinden indiriliyor" i
-  if [[ $(_gc "ENABLE_DEV_MODE") -eq 1 ]]; then
-    wget -O "$temp_file" "${git_repo_dest}/archive/${git_repo_tag}.tar.gz"
-  else
+  # if [[ $(_gc "ENABLE_DEV_MODE") -eq 1 ]]; then
+    # wget -O "$temp_file" "${git_repo_dest}/archive/${git_repo_tag}.tar.gz"
+  # else
     wget -qO "$temp_file" "${git_repo_dest}/archive/${git_repo_tag}.tar.gz"
-  fi
+  # fi
   _log "Yapılandırma dosyalarının son sürümleri $git_provider_name üzerinden indirildi" v
 
   tar -xzf "$temp_file" -C "$temp_dir"
@@ -100,35 +100,14 @@ _interrupt() {
 }
 
 ### MAIN ###
-
-if [[ "$1" == "dev" ]]; then
-  _log "Geliştirici Modundasınız, ne yaptığınızı bilmiyorsanız bu betiği sonlandırınız!!!" warn
-  source development.sh
-  if [[ "$2" == "remote-run" ]]; then
-    _DEV_RUN "remote" "$3"
-  elif [[ "$2" == "local-run" ]]; then
-    _DEV_RUN "local"
-  elif [[ "$2" == "" ]]; then
-    _DEV_RUN "tmp"
-    __TMP_DEV "$@"
-    exit
-  fi
-fi
-
-_sleep 1
+sleep 1
 echo -e "$ORANGE $PARDUS_LOGO $NC \nPARDUS BİREYSEL - KURULUM BETİĞİ"
-_sleep 1
+sleep 1
 
-if [[ $(_gc "DEV_DISABLE_PRECHECKS") -eq 0 ]]; then
-  _prechecks
-fi
-if [[ $(_gc "DEV_DISABLE_DOWNLOAD") -eq 0 ]]; then
-  _download
-  _uc "ENABLE_DEV_MODE" 1
-fi
+_prechecks
+_download
 _preconfigs
 _get_root
-
 
 if [[ $(_gc "DESKTOP_ENVIRONMENT") == "plasma" ]]; then
   echo -e "$INSTALLATION_NOTES $NC\n\n30 saniye bekleniyor..."

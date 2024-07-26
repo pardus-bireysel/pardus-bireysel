@@ -65,7 +65,6 @@ INSTALLATION_NOTES="""
 | KDE paketleri yüklendikten sonra karşınıza çıkacak Display Manager seçme menüsünden "${RED}ligthdm${NC}"i seçiniz |
 |     Sonrasına XFCE/GNOME paketleri silinirken geçici olarak masaüstünüz/terminaliniz gözükmeyebilir    |
 |    Betik komple bittiği zaman Display Manager yeniden başlatılacak ve sizi giriş ekranına atacaktır    |
-|                   Giriş ekranından sağ alttan ${RED}Plasma(X11)${NC}'i seçmeniz gerekmektedir !                   |
 ----------------------------------------------------------------------------------------------------------
 """
 
@@ -96,7 +95,7 @@ _log() {
   ok) echo -e "${GREEN}[ ✔ ]${NC} $1" ;;
   OK) echo -e "${GREEN}[ ✔ ]  $1 ${NC}" ;;
   i) echo -e "${CYAN}[ i ]${NC} $1" ;;
-  v) if [[ $(_gc "ENABLE_DEV_MODE") -eq 1 ]]; then echo -e "${GRAY}$1${NC}"; fi ;;
+  v) echo -e "${GRAY}$1${NC}";;
   *) echo -e "$1" ;;
   esac
 
